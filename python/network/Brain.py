@@ -7,7 +7,6 @@ class Brain:
     def __init__(self, number_of_layers, neurons_per_layer, number_of_inputs):
         self.current_batch = 0
         self.layers = []
-
         input_neurons = []
         for i in range(number_of_inputs):
             input_neurons.append(Neuron([]))
@@ -16,13 +15,13 @@ class Brain:
 
         for i in range(number_of_layers):
             layer_neurons = []
-            for j in range(neuronsPerLayer):
+            for j in range(neurons_per_layer):
                 layer_neurons.append(Neuron(self.layers[i]))
             self.layers.append(layer_neurons)
 
         output_neurons = []
         for i in range(10):
-            output_neurons.append(Neuron(self.layers[self.layers.length - 1]))
+            output_neurons.append(Neuron(self.layers[-1]))
         self.layers.append(output_neurons)
 
     def set_input_activations(self, inputs):
@@ -34,7 +33,7 @@ class Brain:
             for neuron in layer:
                 neuron.calculate_activation()
 
-        for neuron in self.layers[self.layers.length - 1]:
+        for neuron in self.layers[-1]:
             neuron.calculate_activation_withoutBias()
             print(
                 neuron,
@@ -43,12 +42,12 @@ class Brain:
             )
 
     def calculate_cost(self, expected_output):
-        last_layer = self.layers[self.layers.length - 1]
+        last_layer = self.layers[-1]
         cost = 0
 
-        for i in range(expectedOutput.length):
+        for i in range(len(expected_output)):
             cost = cost + pow(
-                expectedOutput[i] - lastLayer[i].get_activation_sigmoid(),
+                expected_output[i] - last_layer[i].get_activation_sigmoid(),
                 2
             )
 

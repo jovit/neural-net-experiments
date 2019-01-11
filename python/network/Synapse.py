@@ -2,6 +2,7 @@ from random import random
 
 LEARNING_RATE = 1/1
 
+
 class Synapse:
     def __init__(self, parent_neuron):
         self.weight = (random() * (-1 if random() < 0.5 else 1))
@@ -9,7 +10,7 @@ class Synapse:
         self.gradient = 0
 
     def get_weighted_value(self):
-        if self.parent_neuron.synapses.length > 0:
+        if len(self.parent_neuron.synapses) > 0:
             return self.weight * self.parent_neuron.getActivationSigmoid()
         else:
             return self.weight * self.parent_neuron.activation
