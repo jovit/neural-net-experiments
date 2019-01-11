@@ -4,6 +4,8 @@ MAX_TRAINING_SIZE = 2000
 # const fs = require("fs").promises;
 # const Brain = require("./Brain");
 
+from network import Neuron
+
 
 def load_training_labels_data():
     with open(
