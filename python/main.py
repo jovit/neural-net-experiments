@@ -1,10 +1,9 @@
 # http://yann.lecun.com/exdb/mnist/
+from network import Brain
 MAX_TRAINING_SIZE = 2000
 
 # const fs = require("fs").promises;
 # const Brain = require("./Brain");
-
-from network import Neuron
 
 
 def load_training_labels_data():
@@ -22,6 +21,7 @@ def load_training_labels_data():
             print("Reading image label " + str((i + 1)) +
                   " out of " + str(number_of_items))
         return labels
+
 
 def load_training_images_data():
     with open(
@@ -161,6 +161,7 @@ def load_training_images_data():
 #     console.log(e);
 #   }
 # };
+
 
 def read_training_data():
     labels = load_training_labels_data()
