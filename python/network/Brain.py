@@ -34,7 +34,7 @@ class Brain:
                 neuron.calculate_activation()
 
         for neuron in self.layers[-1]:
-            neuron.calculate_activation_withoutBias()
+            neuron.calculate_activation_without_bias()
             print(
                 neuron,
                 "digit",
@@ -69,7 +69,7 @@ class Brain:
                 (neuron_obj.get_activation_sigmoid() - expected_output)
         else:
             neuron_obj.relation_to_cost = reduce(lambda a, b: a + b, map(lambda it: it.relationToCost *
-                                                                         it.synapses[neuron].weight * it.get_activation_sigmoid() * (1 - it.get_activation_sigmoid()), self.layers[currentLayer + 1]))
+                                                                         it.synapses[neuron].weight * it.get_activation_sigmoid() * (1 - it.get_activation_sigmoid()), self.layers[current_layer + 1]))
 
         neuron_obj.bias_gradient = neuron_obj.bias_gradient + neuron_obj.get_activation_sigmoid() * \
             (1 - neuron_obj.get_activation_sigmoid()
@@ -89,19 +89,26 @@ class Brain:
             layer = len(self.layers) - 1
         if layer == 0:
             return
-        for i in range(self.layers[layer].length):
-            self.layers[layer][i] = self.calculate_gradient_neuron(
-                i,
-                layer,
-                expected_output[i]
-            )
+        for i in range(len(self.layers[layer])):
+            if layer == len(self.layers) - 1:
+                self.layers[layer][i] = self.calculate_gradient_neuron(
+                    i,
+                    layer,
+                    expected_output[i]
+                )
+            else:
+                self.layers[layer][i] = self.calculate_gradient_neuron(
+                    i,
+                    layer,
+                    None
+                )
         self.apply_backwards_propagation(expected_output, layer - 1)
 
-    def apply_gradients(self, batchSize):
+    def apply_gradients(self, batch_size):
         for layer in self.layers:
             for neuron in layer:
-                neuron.biasGradient = neuron.biasGradient / batchSize
-                neuron.applyGradient()
+                neuron.bias_gradient = neuron.bias_gradient / batch_size
+                neuron.apply_gradient()
                 for synapse in neuron.synapses:
-                    synapse.gradient = synapse.gradient / batchSize
+                    synapse.gradient = synapse.gradient / batch_size
                     synapse.applyGradient()

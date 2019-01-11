@@ -1,6 +1,7 @@
 # http://yann.lecun.com/exdb/mnist/
 from network import Brain
-MAX_TRAINING_SIZE = 2000
+from random import shuffle
+MAX_TRAINING_SIZE = 1
 
 # const fs = require("fs").promises;
 # const Brain = require("./Brain");
@@ -186,55 +187,32 @@ def read_training_data():
 
 # //readTrainingData().then(data => console.log(data));
 
-# const getExpectedOutput = label => {
-#   const output = [];
-#   for (let i = 0; i < 10; i++) {
-#     if (label === i) {
-#       output.push(1);
-#     } else {
-#       output.push(0);
-#     }
-#   }
+def get_expected_output(label):
+    output = []
+    for i in range(10):
+        if label == i:
+            output.append(1)
+        else:
+            output.append(0)
+    return output
 
-#   return output;
-# };
 
-# function shuffle(array) {
-#   var currentIndex = array.length,
-#     temporaryValue,
-#     randomIndex;
+def train():
+    data = read_training_data()
+    brain = Brain(2, 16, len(data[0][1]))
 
-#   // While there remain elements to shuffle...
-#   while (0 !== currentIndex) {
-#     // Pick a remaining element...
-#     randomIndex = Math.floor(Math.random() * currentIndex);
-#     currentIndex -= 1;
+    for _i in range(2000):
+        shuffle(data)
+        for d in data:
+            brain.set_input_activations(d[1])
+            print(str(d[0]))
+            brain.calculate_output()
+            cost = brain.calculate_cost(get_expected_output(d[0]))
+            print("cost: " + str(cost))
+            brain.train(get_expected_output(d[0]), 1)
 
-#     // And swap it with the current element.
-#     temporaryValue = array[currentIndex];
-#     array[currentIndex] = array[randomIndex];
-#     array[randomIndex] = temporaryValue;
-#   }
 
-#   return array;
-# }
-
-# const train = async () => {
-#   let data = await readTrainingData();
-#   const brain = new Brain(2, 16, data[0].image.length);
-#   //console.log("input", data[0].image.length);
-#   for (let i = 0; i < 2000; i++) {
-#     global.gc();
-#     data = shuffle(data);
-#     data.forEach(it => {
-#       brain.setInputActivations(it.image);
-#       console.log(it.label);
-#       brain.calculateOutput();
-#       const cost = brain.calculateCost(getExpectedOutput(it.label));
-#       console.log("cost:", cost);
-#       brain.train(getExpectedOutput(it.label), 100);
-#     });
-#   }
+train()
 
 #   /// test
 #   data = await readTestData();

@@ -4,6 +4,7 @@ from math import exp
 
 LEARNING_RATE = 1/1
 
+
 class Neuron:
     def __init__(self, connected_neurons):
         self.activation = 0
@@ -18,13 +19,13 @@ class Neuron:
     def calculate_activation(self):
         self.activation = self.bias
         for synapse in self.synapses:
-            self.activation += synapse.getWeightedValue()
+            self.activation += synapse.get_weighted_value()
 
     def calculate_activation_without_bias(self):
         self.activation = 0
         for synapse in self.synapses:
             self.activation = self.activation + \
-                self.synapses[synapse].getWeightedValue()
+                synapse.get_weighted_value()
 
     def get_activation_rectified(self):
         return max(self.activation, 0)

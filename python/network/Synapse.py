@@ -11,7 +11,7 @@ class Synapse:
 
     def get_weighted_value(self):
         if len(self.parent_neuron.synapses) > 0:
-            return self.weight * self.parent_neuron.getActivationSigmoid()
+            return self.weight * self.parent_neuron.get_activation_sigmoid()
         else:
             return self.weight * self.parent_neuron.activation
 
