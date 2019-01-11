@@ -2,7 +2,7 @@ from random import random
 from network import Synapse
 from math import exp
 
-LEARNING_RATE = 1/1
+LEARNING_RATE = 1/100
 
 
 class Neuron:

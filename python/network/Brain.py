@@ -35,11 +35,6 @@ class Brain:
 
         for neuron in self.layers[-1]:
             neuron.calculate_activation_without_bias()
-            print(
-                neuron,
-                "digit",
-                neuron.get_activation_sigmoid()
-            )
 
     def calculate_cost(self, expected_output):
         last_layer = self.layers[-1]
