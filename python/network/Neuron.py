@@ -10,16 +10,17 @@ class Neuron:
         self.activation = 0
         self.synapses = []
         self.relationToCost = 0
-        self.bias = random() * 10 * (-1 if random() < 0.5 else 1)
+        self.bias = random()
         self.bias_gradient = 0
 
         for neuron in connected_neurons:
             self.synapses.append(Synapse(neuron))
 
     def calculate_activation(self):
-        self.activation = self.bias
-        for synapse in self.synapses:
-            self.activation += synapse.get_weighted_value()
+        if len(self.synapses) > 0:
+            self.activation = self.bias
+            for synapse in self.synapses:
+                self.activation += synapse.get_weighted_value()
 
     def calculate_activation_without_bias(self):
         self.activation = 0

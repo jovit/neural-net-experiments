@@ -1,7 +1,7 @@
 # http://yann.lecun.com/exdb/mnist/
 from network import Brain
 from random import shuffle
-MAX_TRAINING_SIZE = 60000
+MAX_TRAINING_SIZE = 100
 
 # const fs = require("fs").promises;
 # const Brain = require("./Brain");
@@ -201,7 +201,7 @@ def train():
     data = read_training_data()
     brain = Brain(2, 32, len(data[0][1]))
 
-    for _i in range(2000):
+    for _i in range(4000):
         shuffle(data)
         cost = 0
         for d in data:
@@ -210,7 +210,7 @@ def train():
             brain.calculate_output()
             cost += brain.calculate_cost(get_expected_output(d[0]))
             #print("cost: " + str(cost))
-            brain.train(get_expected_output(d[0]), 20)
+            brain.train(get_expected_output(d[0]), 2)
         print(cost/(len(data)))
         cost = 0
 

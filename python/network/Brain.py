@@ -25,8 +25,8 @@ class Brain:
         self.layers.append(output_neurons)
 
     def set_input_activations(self, inputs):
-        for (neuron, input) in zip(self.layers[0], inputs):
-            neuron.activation = input
+        for i in range(len(self.layers[0])):
+            self.layers[0][i].activation = inputs[i]
 
     def calculate_output(self):
         for layer in self.layers:

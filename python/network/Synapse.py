@@ -10,10 +10,7 @@ class Synapse:
         self.gradient = 0
 
     def get_weighted_value(self):
-        if len(self.parent_neuron.synapses) > 0:
-            return self.weight * self.parent_neuron.get_activation_sigmoid()
-        else:
-            return self.weight * self.parent_neuron.activation
+        return self.weight * self.parent_neuron.get_activation_sigmoid()
 
     def applyGradient(self):
         self.weight = self.weight - (self.gradient * LEARNING_RATE)
