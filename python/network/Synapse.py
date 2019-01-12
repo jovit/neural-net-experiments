@@ -1,6 +1,6 @@
 from random import random
 
-LEARNING_RATE = 1/100
+LEARNING_RATE = 1/10
 
 
 class Synapse:
