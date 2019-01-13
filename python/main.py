@@ -7,15 +7,15 @@ MAX_TRAINING_SIZE = 60000
 # const Brain = require("./Brain");
 
 
-def load_training_labels_data():
+def load_training_labels_data(addr, ammount):
     with open(
-        "./training-data/train-labels-idx1-ubyte",
+        addr,
         "rb"
     ) as f:
         _magic_number = int.from_bytes(f.read(4), byteorder="big")
         number_of_items = int.from_bytes(f.read(4), byteorder="big")
         labels = []
-        for i in range(min(number_of_items, MAX_TRAINING_SIZE)):
+        for i in range(min(number_of_items, ammount)):
             label = ord(f.read(1))
             labels.append(label)
             print("\033[2J")
@@ -24,9 +24,9 @@ def load_training_labels_data():
         return labels
 
 
-def load_training_images_data():
+def load_training_images_data(addr, ammount):
     with open(
-        "./training-data/train-images-idx3-ubyte",
+        addr,
         "rb"
     ) as f:
         _magic_number = int.from_bytes(f.read(4), byteorder="big")
@@ -34,12 +34,12 @@ def load_training_images_data():
         number_of_rows = int.from_bytes(f.read(4), byteorder="big")
         number_of_columns = int.from_bytes(f.read(4), byteorder="big")
         images = []
-        for i in range(min(number_of_items, MAX_TRAINING_SIZE)):
+        for i in range(min(number_of_items, ammount)):
             image = []
             for _ in range(number_of_rows):
                 for _ in range(number_of_columns):
                     pixel = ord(f.read(1))
-                    image.append(pixel)
+                    image.append(pixel/255)
             images.append(image)
             print("\033[2J")
             print("Reading image " + str((i + 1)) +
@@ -165,10 +165,18 @@ def load_training_images_data():
 
 
 def read_training_data():
-    labels = load_training_labels_data()
-    images = load_training_images_data()
+    labels = load_training_labels_data(
+        "./training-data/train-labels-idx1-ubyte", MAX_TRAINING_SIZE)
+    images = load_training_images_data(
+        "./training-data/train-images-idx3-ubyte", MAX_TRAINING_SIZE)
     return list(zip(labels, images))
 
+def read_testing_data():
+    labels = load_training_labels_data(
+        "./test-data/t10k-labels-idx1-ubyte", 10000)
+    images = load_training_images_data(
+        "./test-data/t10k-images-idx3-ubyte", 10000)
+    return list(zip(labels, images))
 
 # const readTestData = async () => {
 #   const labels = await loadTestLabelsData();
@@ -201,19 +209,27 @@ def train():
     data = read_training_data()
     brain = Brain(2, 32, len(data[0][1]))
 
-    for _i in range(4000):
+    for _i in range(500):
         shuffle(data)
         cost = 0
         for d in data:
             brain.set_input_activations(d[1])
-            #print(str(d[0]))
+            # print(str(d[0]))
             brain.calculate_output()
             cost += brain.calculate_cost(get_expected_output(d[0]))
             #print("cost: " + str(cost))
             brain.train(get_expected_output(d[0]), 20)
         print(cost/(len(data)))
         cost = 0
+    
+    data = read_testing_data()
+    cost = 0
+    for d in data:
+            brain.set_input_activations(d[1])
+            brain.calculate_output()
+            cost += brain.calculate_cost(get_expected_output(d[0]))
 
+    print("final cost", cost/(len(data)))
 
 train()
 
