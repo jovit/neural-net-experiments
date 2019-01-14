@@ -1,7 +1,8 @@
 # http://yann.lecun.com/exdb/mnist/
 from network import Brain
 from random import shuffle
-MAX_TRAINING_SIZE = 60000
+import pickle
+MAX_TRAINING_SIZE = 2
 
 # const fs = require("fs").promises;
 # const Brain = require("./Brain");
@@ -171,6 +172,7 @@ def read_training_data():
         "./training-data/train-images-idx3-ubyte", MAX_TRAINING_SIZE)
     return list(zip(labels, images))
 
+
 def read_testing_data():
     labels = load_training_labels_data(
         "./test-data/t10k-labels-idx1-ubyte", 10000)
@@ -195,6 +197,7 @@ def read_testing_data():
 
 # //readTrainingData().then(data => console.log(data));
 
+
 def get_expected_output(label):
     output = []
     for i in range(10):
@@ -205,11 +208,21 @@ def get_expected_output(label):
     return output
 
 
+def save_net_status(net, file):
+    with open(file, 'wb') as output:
+        pickle.dump(net, output, pickle.HIGHEST_PROTOCOL)
+
+
+def load_net(file):
+    with open(file, 'rb') as input:
+        return pickle.load(input)
+
+
 def train():
     data = read_training_data()
-    brain = Brain(2, 32, len(data[0][1]))
-
-    for _i in range(500):
+    # brain = Brain(2, 32, len(data[0][1]))
+    brain = load_net("network_save")
+    for _i in range(5):
         shuffle(data)
         cost = 0
         for d in data:
@@ -218,20 +231,27 @@ def train():
             brain.calculate_output()
             cost += brain.calculate_cost(get_expected_output(d[0]))
             #print("cost: " + str(cost))
-            brain.train(get_expected_output(d[0]), 20)
+            brain.train(get_expected_output(d[0]), 2)
         print(cost/(len(data)))
         cost = 0
-    
+        print("saving net")
+        save_net_status(brain, "network_save")
+
+
+def test():
+    brain = load_net("network_save")
     data = read_testing_data()
     cost = 0
     for d in data:
-            brain.set_input_activations(d[1])
-            brain.calculate_output()
-            cost += brain.calculate_cost(get_expected_output(d[0]))
+        brain.set_input_activations(d[1])
+        brain.calculate_output()
+        cost += brain.calculate_cost(get_expected_output(d[0]))
 
     print("final cost", cost/(len(data)))
 
+
 train()
+test()
 
 #   /// test
 #   data = await readTestData();
