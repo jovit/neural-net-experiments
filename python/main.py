@@ -2,7 +2,7 @@
 from network import Brain
 from random import shuffle
 import pickle
-MAX_TRAINING_SIZE = 2
+MAX_TRAINING_SIZE = 60000
 
 # const fs = require("fs").promises;
 # const Brain = require("./Brain");
@@ -222,7 +222,7 @@ def train():
     data = read_training_data()
     # brain = Brain(2, 32, len(data[0][1]))
     brain = load_net("network_save")
-    for _i in range(5):
+    for _i in range(1):
         shuffle(data)
         cost = 0
         for d in data:
