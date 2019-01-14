@@ -36,6 +36,15 @@ class Brain:
         for neuron in self.layers[-1]:
             neuron.calculate_activation_without_bias()
 
+        max_activation = 0
+        max_index = 0
+        for i in range(10):
+            if self.layers[-1][i].get_activation_sigmoid() > max_activation:
+                max_activation = self.layers[-1][i].get_activation_sigmoid()
+                max_index = i
+
+        return max_index
+
     def calculate_cost(self, expected_output):
         last_layer = self.layers[-1]
         cost = 0

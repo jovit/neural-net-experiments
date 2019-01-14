@@ -222,15 +222,13 @@ def train():
     data = read_training_data()
     # brain = Brain(2, 32, len(data[0][1]))
     brain = load_net("network_save")
-    for _i in range(1):
+    for _i in range(8):
         shuffle(data)
         cost = 0
         for d in data:
             brain.set_input_activations(d[1])
-            # print(str(d[0]))
             brain.calculate_output()
             cost += brain.calculate_cost(get_expected_output(d[0]))
-            #print("cost: " + str(cost))
             brain.train(get_expected_output(d[0]), 2)
         print(cost/(len(data)))
         cost = 0
@@ -242,13 +240,16 @@ def test():
     brain = load_net("network_save")
     data = read_testing_data()
     cost = 0
+    right = 0
     for d in data:
         brain.set_input_activations(d[1])
-        brain.calculate_output()
+        result = brain.calculate_output()
         cost += brain.calculate_cost(get_expected_output(d[0]))
+        if result == d[0]:
+            right += 1
 
     print("final cost", cost/(len(data)))
-
+    print("right ratio", right/len(data))
 
 train()
 test()
