@@ -1,13 +1,14 @@
+from typing import Dict, List
 from network import Neuron
 from math import pow
 from functools import reduce
 
 
 class Brain:
-    def __init__(self, number_of_layers, neurons_per_layer, number_of_inputs):
-        self.current_batch = 0
-        self.layers = []
-        input_neurons = []
+    def __init__(self, number_of_layers: int, neurons_per_layer: int, number_of_inputs: int):
+        self.current_batch: int = 0
+        self.layers: List[List[Neuron]] = []
+        input_neurons: List[Neuron] = []
         for i in range(number_of_inputs):
             input_neurons.append(Neuron([]))
 

@@ -222,7 +222,7 @@ def train():
     data = read_training_data()
     # brain = Brain(2, 32, len(data[0][1]))
     brain = load_net("network_save")
-    for _i in range(8):
+    for _i in range(10):
         shuffle(data)
         cost = 0
         for d in data:
